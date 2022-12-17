@@ -1,0 +1,3 @@
+[submodule "aria2-static-builds"]
+	path = aria2-static-builds
+	url = git@github.com:q3aql/aria2-static-builds.git
