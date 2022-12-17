@@ -27,6 +27,7 @@ SQLITE3=https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
 C_ARES=https://c-ares.haxx.se/download/c-ares-1.17.2.tar.gz
 SSH2=https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
 
+## TMP DIR ##
 mkdir ~/aria2_build_tmp
 
 ## CONFIG ##
