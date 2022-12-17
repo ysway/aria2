@@ -26,6 +26,7 @@ EXPAT=https://github.com/libexpat/libexpat/releases/download/R_2_4_1/expat-2.4.1
 SQLITE3=https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
 C_ARES=https://c-ares.haxx.se/download/c-ares-1.17.2.tar.gz
 SSH2=https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
+SSH2_PATCH=https://github.com/libssh2/libssh2/commit/ba149e804ef653cc05ed9803dfc94519ce9328f7.patch
 
 ## TMP DIR ##
 mkdir ~/aria2_build_tmp
@@ -85,8 +86,10 @@ cd $BUILD_DIRECTORY
  # libssh2
   cd ..
   $DOWNLOADER $SSH2
+  $DOWNLOADER $SSH2_PATCH
   tar zxvf libssh2-1.9.0.tar.gz
   cd libssh2-1.9.0/
+  patch -p1 < ../ba149e804ef653cc05ed9803dfc94519ce9328f7.patch
   rm -rf $PREFIX/lib/pkgconfig/libssh2.pc
   CC=$HOST-gcc CXX=$HOST-g++ AR=$HOST-ar RANLIB=$HOST-ranlib ./configure --prefix=$PREFIX --host=$HOST --enable-static --disable-shared
   make
