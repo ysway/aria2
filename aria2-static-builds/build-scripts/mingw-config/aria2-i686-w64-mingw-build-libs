@@ -9,7 +9,7 @@
 # * openSSL
 # * libssh2
 
-#IMPORTANT: Require install gcc-mingw-w64-i686 g++-mingw-w64-i686
+#IMPORTANT: Require install gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
 
 #CHECK TOOL FOR DOWNLOAD
  aria2c --help > /dev/null
@@ -26,9 +26,13 @@ EXPAT=https://github.com/libexpat/libexpat/releases/download/R_2_4_1/expat-2.4.1
 SQLITE3=https://sqlite.org/2021/sqlite-autoconf-3360000.tar.gz
 C_ARES=https://c-ares.haxx.se/download/c-ares-1.17.2.tar.gz
 SSH2=https://www.libssh2.org/download/libssh2-1.9.0.tar.gz
+SSH2_PATCH=https://github.com/libssh2/libssh2/commit/ba149e804ef653cc05ed9803dfc94519ce9328f7.patch
+
+## TMP DIR ##
+mkdir ~/aria2_build_tmp
 
 ## CONFIG ##
-BUILD_DIRECTORY=/tmp/
+BUILD_DIRECTORY=~/aria2_build_tmp/
 HOST=i686-w64-mingw32
 PREFIX=/usr/i686-w64-mingw32
 
@@ -66,7 +70,7 @@ cd $BUILD_DIRECTORY
   $DOWNLOADER $OPENSSL
   tar zxvf openssl-1.1.1l.tar.gz
   cd openssl-1.1.1l/
-  ./Configure mingw --cross-compile-prefix=$HOST- --prefix=$PREFIX shared
+  ./Configure mingw64 --cross-compile-prefix=$HOST- --prefix=$PREFIX shared
   make
   make install
 #
@@ -82,10 +86,12 @@ cd $BUILD_DIRECTORY
  # libssh2
   cd ..
   $DOWNLOADER $SSH2
+  $DOWNLOADER $SSH2_PATCH
   tar zxvf libssh2-1.9.0.tar.gz
   cd libssh2-1.9.0/
+  patch -p1 < ../ba149e804ef653cc05ed9803dfc94519ce9328f7.patch
   rm -rf $PREFIX/lib/pkgconfig/libssh2.pc
-  CC=$HOST-gcc CXX=$HOST-g++ AR=$HOST-ar RANLIB=$HOST-ranlib ./configure --without-libgcrypt --with-openssl --without-wincng --prefix=$PREFIX --host=$HOST --enable-static --disable-shared
+  CC=$HOST-gcc CXX=$HOST-g++ AR=$HOST-ar RANLIB=$HOST-ranlib ./configure --prefix=$PREFIX --host=$HOST --enable-static --disable-shared
   make
   make install
 #
@@ -97,6 +103,7 @@ cd $BUILD_DIRECTORY
   rm -rf expat-*
   rm -rf openssl-*
   rm -rf libssh2-*
-
+  cd ~
+  rm -rf aria2_build_tmp
 #
  echo "finished!"
