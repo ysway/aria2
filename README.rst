@@ -1,4 +1,4 @@
-aria2 - The ultra fast download utility
+aria2 - The ultra fast download utility `[Download Build] <https://github.com/ysway/aria2/tree/master/build>`_
 =======================================
 
 Disclaimer
